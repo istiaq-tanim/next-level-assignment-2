@@ -5,7 +5,7 @@ const createUser = async (req: Request, res: Response) => {
   try {
     const user = req.body.user;
     const result = await UserServices.userToDatabase(user);
-    res.status(200).json({
+    res.status(201).json({
       success: true,
       message: 'User created successfully!',
       data: result,
@@ -42,8 +42,25 @@ const getSingleUser = async (req: Request, res: Response) => {
   }
 };
 
+const updateUser = async (req: Request, res: Response) => {
+  try {
+    const userData = req.body
+    const { userId } = req.params
+
+    const result = UserServices.updateUserToDatabase(userId, userData)
+    res.status(200).json({
+      success: true,
+      message: 'User updated successfully!',
+      data: result,
+    });
+
+  } catch (error) {
+    console.log(error)
+  }
+}
 export const UserController = {
   createUser,
   getUsers,
   getSingleUser,
+  updateUser
 };
