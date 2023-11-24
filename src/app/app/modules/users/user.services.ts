@@ -1,4 +1,4 @@
-import { User } from './../user.model';
+import { User } from './user.model';
 import { TUser } from './user.interface';
 const userToDatabase = async (user: TUser): Promise<TUser> => {
       const result = (await User.create(user))
@@ -35,6 +35,18 @@ const deleteUserFromDataBase = async (userId: string): Promise<TUser | null> => 
             throw new Error('User not found');
       }
       const result = await User.findOneAndDelete({ userId })
+      return result
+}
+
+const createOrderToDatabase = async (userId: string, userData: TUser): Promise<TUser | null> => {
+      if (!(await User.isUserExists(userId))) {
+            throw new Error('User not found');
+      }
+      const updateData = { $set: userData };
+      const result = await User.findOneAndUpdate({ userId }, updateData, {
+            new: true,
+            runValidators: true,
+      })
       return result
 }
 

@@ -6,7 +6,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use('/', UserRoute);
+app.use('/api/v1/users', UserRoute);
 
 app.get('/', (req, res) => {
   res.send('Hello Bro');
