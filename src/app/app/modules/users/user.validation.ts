@@ -14,8 +14,8 @@ const addressSchema = z.object({
 
 const orderSchema = z.object({
       productName: z.string(),
-      price: z.number(),
-      quantity: z.number(),
+      price: z.number().positive(),
+      quantity: z.number().positive(),
 });
 
 const userValidationSchema = z.object({

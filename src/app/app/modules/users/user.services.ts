@@ -1,12 +1,12 @@
 import { User } from './user.model';
-import { TUser } from './user.interface';
+import { TOrders, TUser } from './user.interface';
 const userToDatabase = async (user: TUser): Promise<TUser> => {
       const result = (await User.create(user))
       return result;
 };
 
 const getUsersFromDatabase = async (): Promise<TUser[]> => {
-      const result = await User.find().select({ username: 1, fullName: 1, age: 1, email: 1, address: 1 });
+      const result = await User.find().select({ username: 1, fullName: 1, age: 1, email: 1, address: 1, _id: 0 });
       return result
 };
 
@@ -14,7 +14,7 @@ const getSingleUserFromDatabase = async (userId: string): Promise<TUser | null> 
       if (!(await User.isUserExists(userId))) {
             throw new Error('User not found');
       }
-      const result = await User.findOne({ userId }).select({ password: 0 });
+      const result = await User.findOne({ userId }).select({ password: 0, orders: 0 }).select('-_id');
       return result;
 };
 
@@ -26,7 +26,7 @@ const updateUserToDatabase = async (userId: string, userData: TUser): Promise<TU
       const result = await User.findOneAndUpdate({ userId }, updateData, {
             new: true,
             runValidators: true,
-      })
+      }).select({ orders: 0 }).select('-_id')
       return result
 }
 
@@ -38,11 +38,11 @@ const deleteUserFromDataBase = async (userId: string): Promise<TUser | null> => 
       return result
 }
 
-const createOrderToDatabase = async (userId: string, userData: TUser): Promise<TUser | null> => {
+const createOrderToDatabase = async (userId: string, userData: TOrders): Promise<TUser | null> => {
       if (!(await User.isUserExists(userId))) {
             throw new Error('User not found');
       }
-      const updateData = { $set: userData };
+      const updateData = { $push: { orders: userData } }
       const result = await User.findOneAndUpdate({ userId }, updateData, {
             new: true,
             runValidators: true,
@@ -50,10 +50,29 @@ const createOrderToDatabase = async (userId: string, userData: TUser): Promise<T
       return result
 }
 
+const getOrder = async (userId: string): Promise<TUser | null> => {
+      if (!(await User.isUserExists(userId))) {
+            throw new Error('User not found');
+      }
+      const result = await User.findOne({ userId }).select({ orders: 1 })
+      return result
+}
+
+const totalPrice = async (userId: string): Promise<TUser | null> => {
+      if (!(await User.isUserExists(userId))) {
+            throw new Error('User not found');
+      }
+      const result = await User.aggregate([
+
+      ])
+}
+
 export const UserServices = {
       userToDatabase,
       getUsersFromDatabase,
       getSingleUserFromDatabase,
       updateUserToDatabase,
-      deleteUserFromDataBase
+      deleteUserFromDataBase,
+      createOrderToDatabase,
+      getOrder
 };

@@ -7,5 +7,7 @@ router.get('/api/users', UserController.getUsers);
 router.get('/api/users/:userId', UserController.getSingleUser);
 router.put('/api/users/:userId', UserController.updateUser);
 router.delete('/api/users/:userId', UserController.deleteUser);
+router.put('/api/users/:userId/orders', UserController.createProduct);
+router.get('/api/users/:userId/orders', UserController.getUserOrder);
 
 export const UserRoute = router;
