@@ -35,7 +35,11 @@ const userSchema = new Schema<TUser, UserModel>({
   orders: [orderSchema],
 });
 
-
+userSchema.pre("save", async function (next) {
+  const user = this
+  user.password = await bcrypt.hash(user.password, Number(config.bcrypt_salt),)
+  next()
+})
 
 userSchema.statics.isUserExists = async function (userId: string) {
   const existingUser = await User.findOne({ userId });
