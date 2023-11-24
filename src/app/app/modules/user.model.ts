@@ -1,5 +1,9 @@
+/* eslint-disable @typescript-eslint/no-this-alias */
 import { Schema, model } from 'mongoose';
-import { TAddress, TFullName, TOrders, TUser } from './users/user.interface';
+import { TAddress, TFullName, TOrders, TUser, UserModel } from './users/user.interface';
+import bcrypt from 'bcrypt';
+import config from '../config';
+
 
 const fullNameSchema = new Schema<TFullName>({
   firstName: { type: String, required: [true, 'First Name is required'], trim: true },
@@ -18,7 +22,7 @@ const orderSchema = new Schema<TOrders>({
   quantity: { type: Number },
 });
 
-const userSchema = new Schema<TUser>({
+const userSchema = new Schema<TUser, UserModel>({
   userId: { type: String, required: true, unique: true },
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
@@ -31,4 +35,10 @@ const userSchema = new Schema<TUser>({
   orders: [orderSchema],
 });
 
-export const User = model<TUser>('User', userSchema);
+
+
+userSchema.statics.isUserExists = async function (userId: string) {
+  const existingUser = await User.findOne({ userId });
+  return existingUser;
+};
+export const User = model<TUser, UserModel>('User', userSchema);

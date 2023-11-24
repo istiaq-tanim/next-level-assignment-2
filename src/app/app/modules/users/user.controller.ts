@@ -1,10 +1,14 @@
 import { Request, Response } from 'express';
 import { UserServices } from './user.services';
+import userValidationSchema from './user.validation';
 
 const createUser = async (req: Request, res: Response) => {
   try {
     const user = req.body.user;
-    const result = await UserServices.userToDatabase(user);
+
+    const zodParseData = userValidationSchema.parse(user)
+
+    const result = await UserServices.userToDatabase(zodParseData);
     res.status(201).json({
       success: true,
       message: 'User created successfully!',
@@ -49,7 +53,10 @@ const getSingleUser = async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: error.message || 'something went wrong',
-      error: error,
+      error: {
+        "code": 404,
+        "description": error.message
+      }
     });
   }
 };
@@ -70,7 +77,10 @@ const updateUser = async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: error.message || 'something went wrong',
-      error: error,
+      error: {
+        "code": 404,
+        "description": error.message
+      }
     });
   }
 }
@@ -89,7 +99,10 @@ const deleteUser = async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: error.message || 'something went wrong',
-      error: error,
+      error: {
+        "code": 404,
+        "description": error.message
+      }
     });
   }
 }
