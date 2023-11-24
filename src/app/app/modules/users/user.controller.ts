@@ -6,7 +6,7 @@ const createUser = async (req: Request, res: Response) => {
   try {
     const user = req.body.user;
 
-    const zodParseData = userValidationSchema.parse(user)
+    const zodParseData = userValidationSchema.parse(user);
 
     const result = await UserServices.userToDatabase(zodParseData);
     res.status(201).json({
@@ -54,124 +54,119 @@ const getSingleUser = async (req: Request, res: Response) => {
       success: false,
       message: error.message || 'something went wrong',
       error: {
-        "code": 404,
-        "description": error.message
-      }
+        code: 404,
+        description: error.message,
+      },
     });
   }
 };
 
 const updateUser = async (req: Request, res: Response) => {
   try {
-    const userData = req.body
-    const { userId } = req.params
+    const userData = req.body;
+    const { userId } = req.params;
 
-    const result = await UserServices.updateUserToDatabase(userId, userData)
+    const result = await UserServices.updateUserToDatabase(userId, userData);
     res.status(200).json({
       success: true,
       message: 'User updated successfully!',
       data: result,
     });
-
   } catch (error: any) {
     res.status(500).json({
       success: false,
       message: error.message || 'something went wrong',
       error: {
-        "code": 404,
-        "description": error.message
-      }
+        code: 404,
+        description: error.message,
+      },
     });
   }
-}
+};
 
 const deleteUser = async (req: Request, res: Response) => {
   try {
-    const { userId } = req.params
-    const result = await UserServices.deleteUserFromDataBase(userId)
+    const { userId } = req.params;
+    const result = await UserServices.deleteUserFromDataBase(userId);
     res.status(200).json({
       success: true,
       message: 'User Deleted successfully!',
       data: null,
     });
-
   } catch (error: any) {
     res.status(500).json({
       success: false,
       message: error.message || 'something went wrong',
       error: {
-        "code": 404,
-        "description": error.message
-      }
+        code: 404,
+        description: error.message,
+      },
     });
   }
-}
+};
 
 const createProduct = async (req: Request, res: Response) => {
   try {
-    const userData = req.body
-    const { userId } = req.params
-    const result = await UserServices.createOrderToDatabase(userId, userData)
+    const userData = req.body;
+    const { userId } = req.params;
+    const result = await UserServices.createOrderToDatabase(userId, userData);
     res.status(200).json({
       success: true,
-      message: "Order created successfully!",
+      message: 'Order created successfully!',
       data: null,
     });
-
   } catch (error: any) {
     res.status(500).json({
       success: false,
       message: error.message || 'something went wrong',
       error: {
-        "code": 404,
-        "description": error.message
-      }
+        code: 404,
+        description: error.message,
+      },
     });
   }
-}
+};
 const getUserOrder = async (req: Request, res: Response) => {
   try {
-    const { userId } = req.params
-    const result = await UserServices.getOrder(userId)
+    const { userId } = req.params;
+    const result = await UserServices.getOrder(userId);
     res.status(200).json({
       success: true,
-      message: "Order created successfully!",
+      message: 'Order created successfully!',
       data: result,
     });
-
   } catch (error: any) {
     res.status(500).json({
       success: false,
       message: error.message || 'something went wrong',
       error: {
-        "code": 404,
-        "description": error.message
-      }
+        code: 404,
+        description: error.message,
+      },
     });
   }
-}
+};
 
 const getTotalPrice = async (req: Request, res: Response) => {
   try {
-    const { userId } = req.params
-    const result = await UserServices.getTotalPriceFromDB(userId)
+    const { userId } = req.params;
+    const result = await UserServices.getTotalPriceFromDB(userId);
     res.status(200).json({
       success: true,
-      message: "Order created successfully!",
+      message: 'Order created successfully!',
       data: result,
     });
-
   } catch (error: any) {
     res.status(500).json({
       success: false,
       message: error.message || 'something went wrong',
       error: {
-        "code": 404,
-        "description": error.message
-      }
+        code: 404,
+        description: error.message,
+      },
     });
   }
-}
+};
 export const UserController = {
   createUser,
   getUsers,
@@ -180,5 +175,5 @@ export const UserController = {
   deleteUser,
   createProduct,
   getUserOrder,
-  getTotalPrice
+  getTotalPrice,
 };

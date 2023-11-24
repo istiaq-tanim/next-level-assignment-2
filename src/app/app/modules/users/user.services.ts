@@ -63,28 +63,18 @@ const getTotalPriceFromDB = async (userId: string) => {
             throw new Error('User not found');
       }
       const result = await User.aggregate([
-
-            {
-                  $unwind: "$userId"
-            },
+            { $match: { userId } },
+            { $unwind: "$orders" },
             {
                   $group:
                   {
-                        _id: orders,
-                        Price: { $sum: "$orders.price" },
-                        Quantity: { $sum: "$orders.quantity" },
+                        _id: null,
+                        totalAmount:
+                        {
+                              $sum: { $multiply: ["$orders.price", "$orders.quantity"] }
+                        }
                   }
-            },
-            // {
-
-            //       $project:
-            //       {
-            //             totalPrice: {
-            //                   $multiply: ["$Price", "$Quantity"]
-            //             }
-            //       }
-            // }
-
+            }
       ])
       return result
 }
