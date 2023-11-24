@@ -41,6 +41,12 @@ userSchema.pre("save", async function (next) {
   next()
 })
 
+userSchema.methods.toJSON = function () {
+  const obj = this.toObject();
+  delete obj.password;
+  return obj;
+}
+
 userSchema.statics.isUserExists = async function (userId: string) {
   const existingUser = await User.findOne({ userId });
   return existingUser;
