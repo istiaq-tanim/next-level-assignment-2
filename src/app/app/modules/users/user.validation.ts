@@ -13,8 +13,14 @@ const addressSchema = z.object({
 
 const orderSchema = z.object({
   productName: z.string(),
-  price: z.number().refine(value => value > 0, (value) => ({ message: `${value} Should be Positive` })),
-  quantity: z.number().refine(value => value > 0, (value) => ({ message: `${value} Should be Positive` })),
+  price: z.number().refine(
+    (value) => value > 0,
+    (value) => ({ message: `${value} Should be Positive` }),
+  ),
+  quantity: z.number().refine(
+    (value) => value > 0,
+    (value) => ({ message: `${value} Should be Positive` }),
+  ),
 });
 
 const userValidationSchema = z.object({
