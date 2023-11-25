@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { UserServices } from './user.services';
-import userValidationSchema from './user.validation';
+import { orderSchema, userValidationSchema } from './user.validation';
 
 
 const createUser = async (req: Request, res: Response) => {
@@ -64,7 +64,7 @@ const updateUser = async (req: Request, res: Response) => {
       try {
             const userData = req.body;
             const { userId } = req.params;
-            // const zodParseUpdateData = userUpdateValidationSchema.parse(userData);
+
             const result = await UserServices.updateUserToDatabase(userId, userData);
             res.status(200).json({
                   success: true,
@@ -109,8 +109,8 @@ const createProduct = async (req: Request, res: Response) => {
             const userData = req.body;
             const { userId } = req.params;
 
-
-            await UserServices.createOrderToDatabase(userId, userData);
+            const parserData = orderSchema.parse(userData)
+            await UserServices.createOrderToDatabase(userId, parserData);
             res.status(200).json({
                   success: true,
                   message: 'Order created successfully!',

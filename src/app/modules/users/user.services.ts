@@ -63,6 +63,7 @@ const createOrderToDatabase = async (
       if (!(await User.isUserExists(userId))) {
             throw new Error('User not found');
       }
+
       const updateData = { $push: { orders: userData } };
       const result = await User.findOneAndUpdate({ userId }, updateData, {
             new: true,

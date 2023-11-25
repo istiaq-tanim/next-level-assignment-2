@@ -36,9 +36,9 @@ const orderSchema = new Schema<TOrders>({
 });
 
 const userSchema = new Schema<TUser, UserModel>({
-      userId: { type: String, required: true, unique: true },
-      username: { type: String, required: true, unique: true },
-      password: { type: String, required: true },
+      userId: { type: String, unique: true },
+      username: { type: String, unique: true },
+      password: { type: String, },
       fullName: { type: fullNameSchema, _id: false },
       age: { type: Number },
       email: { type: String },

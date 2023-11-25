@@ -11,19 +11,19 @@ const addressSchema = z.object({
       country: z.string(),
 });
 
-const orderSchema = z.object({
+export const orderSchema = z.object({
       productName: z.string(),
       price: z.number().refine(
             (value) => value > 0,
-            (value) => ({ message: `${value} Should be Positive` }),
+            (value) => ({ message: `Price ${value} Should be Positive Value` }),
       ),
       quantity: z.number().refine(
             (value) => value > 0,
-            (value) => ({ message: `${value} Should be Positive` }),
+            (value) => ({ message: `Quantity ${value} Should be Positive Value` }),
       ),
 });
 
-const userValidationSchema = z.object({
+export const userValidationSchema = z.object({
       userId: z.string(),
       username: z
             .string()
@@ -40,4 +40,5 @@ const userValidationSchema = z.object({
       orders: z.array(orderSchema).optional(),
 });
 
-export default userValidationSchema;
+
+
