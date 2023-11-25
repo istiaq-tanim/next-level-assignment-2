@@ -6,10 +6,13 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use('/api/v1/users', UserRoute);
+app.use('/api/users', UserRoute);
 
 app.get('/', (req, res) => {
-  res.send('Hello Bro');
+      res.status(200).json({
+            status: 'success',
+            message: 'Welcome to  Next Level Assignment',
+      })
 });
 
 export default app;
