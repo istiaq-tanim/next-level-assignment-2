@@ -39,12 +39,12 @@ const userSchema = new Schema<TUser, UserModel>({
       userId: { type: String, required: true, unique: true },
       username: { type: String, required: true, unique: true },
       password: { type: String, required: true },
-      fullName: { type: fullNameSchema, required: true, _id: false },
+      fullName: { type: fullNameSchema, _id: false },
       age: { type: Number },
-      email: { type: String, required: true },
+      email: { type: String },
       isActive: { type: Boolean },
       hobbies: { type: [String] },
-      address: { type: addressSchema, required: true, _id: false },
+      address: { type: addressSchema, _id: false },
       orders: [orderSchema],
 });
 

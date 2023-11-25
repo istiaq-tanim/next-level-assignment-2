@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { UserServices } from './user.services';
 import userValidationSchema from './user.validation';
 
+
 const createUser = async (req: Request, res: Response) => {
       try {
             const user = req.body.user;
@@ -41,7 +42,6 @@ const getUsers = async (req: Request, res: Response) => {
 const getSingleUser = async (req: Request, res: Response) => {
       try {
             const { userId } = req.params;
-            console.log(userId);
             const result = await UserServices.getSingleUserFromDatabase(userId);
             res.status(200).json({
                   success: true,
@@ -64,7 +64,7 @@ const updateUser = async (req: Request, res: Response) => {
       try {
             const userData = req.body;
             const { userId } = req.params;
-
+            // const zodParseUpdateData = userUpdateValidationSchema.parse(userData);
             const result = await UserServices.updateUserToDatabase(userId, userData);
             res.status(200).json({
                   success: true,
@@ -86,7 +86,7 @@ const updateUser = async (req: Request, res: Response) => {
 const deleteUser = async (req: Request, res: Response) => {
       try {
             const { userId } = req.params;
-            const result = await UserServices.deleteUserFromDataBase(userId);
+            await UserServices.deleteUserFromDataBase(userId);
             res.status(200).json({
                   success: true,
                   message: 'User Deleted successfully!',
@@ -108,7 +108,9 @@ const createProduct = async (req: Request, res: Response) => {
       try {
             const userData = req.body;
             const { userId } = req.params;
-            const result = await UserServices.createOrderToDatabase(userId, userData);
+
+
+            await UserServices.createOrderToDatabase(userId, userData);
             res.status(200).json({
                   success: true,
                   message: 'Order created successfully!',
@@ -150,6 +152,7 @@ const getTotalPrice = async (req: Request, res: Response) => {
       try {
             const { userId } = req.params;
             const result = await UserServices.getTotalPriceFromDB(userId);
+
             res.status(200).json({
                   success: true,
                   message: 'Total price calculated successfully!',

@@ -95,6 +95,9 @@ const getTotalPriceFromDB = async (userId: string) => {
                   },
             },
       ]);
+      if (result.length === 0) {
+            return 0
+      }
       return result;
 };
 
