@@ -7,8 +7,7 @@ import {
   TUser,
   UserModel,
 } from './user.interface';
-import bcrypt from 'bcrypt';
-import config from '../../config';
+
 
 const fullNameSchema = new Schema<TFullName>({
   firstName: {
@@ -44,12 +43,6 @@ const userSchema = new Schema<TUser, UserModel>({
   hobbies: { type: [String] },
   address: { type: addressSchema, _id: false },
   orders: { type: [orderSchema] },
-});
-
-userSchema.pre('save', async function (next) {
-  const user = this;
-  user.password = await bcrypt.hash(user.password, Number(config.bcrypt_salt));
-  next();
 });
 
 userSchema.methods.toJSON = function () {
