@@ -1,19 +1,19 @@
 import { Model } from 'mongoose';
 
 export type TFullName = {
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
 };
 
 export type TAddress = {
-  street: string;
-  city: string;
-  country: string;
+  street?: string;
+  city?: string;
+  country?: string;
 };
 export type TOrders = {
-  productName: string;
-  price: number;
-  quantity: number;
+  productName?: string;
+  price?: number;
+  quantity?: number;
 };
 
 export type TUser = {

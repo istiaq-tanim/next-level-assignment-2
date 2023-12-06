@@ -1,12 +1,11 @@
 import { Request, Response } from 'express';
 import { UserServices } from './user.services';
-import { orderSchema, userValidationSchema } from './user.validation';
+import { orderSchema, userCreateValidationUpdateSchema, userUpdateValidationUpdateSchema } from './user.validation';
 
 const createUser = async (req: Request, res: Response) => {
   try {
-    const user = req.body.user;
-
-    const zodParseData = userValidationSchema.parse(user);
+    const user = req.body;
+    const zodParseData = userCreateValidationUpdateSchema.parse(user);
     const result = await UserServices.userToDatabase(zodParseData);
     res.status(201).json({
       success: true,
@@ -61,10 +60,10 @@ const getSingleUser = async (req: Request, res: Response) => {
 
 const updateUser = async (req: Request, res: Response) => {
   try {
-    const userData = req.body;
+    const user = req.body;
     const { userId } = req.params;
-
-    const result = await UserServices.updateUserToDatabase(userId, userData);
+    const zodParseData = userUpdateValidationUpdateSchema.parse(user);
+    const result = await UserServices.updateUserToDatabase(userId, zodParseData);
     res.status(200).json({
       success: true,
       message: 'User updated successfully!',

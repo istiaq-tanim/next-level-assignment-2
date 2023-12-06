@@ -13,20 +13,18 @@ import config from '../../config';
 const fullNameSchema = new Schema<TFullName>({
   firstName: {
     type: String,
-    required: [true, 'First Name is required'],
     trim: true,
   },
   lastName: {
     type: String,
-    required: [true, 'Last Name is required'],
     trim: true,
   },
 });
 
 const addressSchema = new Schema<TAddress>({
-  street: { type: String },
-  city: { type: String },
-  country: { type: String },
+  street: { type: String, trim: true, },
+  city: { type: String, trim: true, },
+  country: { type: String, trim: true, },
 });
 
 const orderSchema = new Schema<TOrders>({
@@ -36,7 +34,7 @@ const orderSchema = new Schema<TOrders>({
 });
 
 const userSchema = new Schema<TUser, UserModel>({
-  userId: { type: String, unique: true },
+  userId: { type: String, unique: true, required: true },
   username: { type: String, unique: true },
   password: { type: String },
   fullName: { type: fullNameSchema, _id: false },
@@ -45,7 +43,7 @@ const userSchema = new Schema<TUser, UserModel>({
   isActive: { type: Boolean },
   hobbies: { type: [String] },
   address: { type: addressSchema, _id: false },
-  orders: [orderSchema],
+  orders: { type: [orderSchema] },
 });
 
 userSchema.pre('save', async function (next) {
@@ -54,11 +52,29 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
+userSchema.pre('findOneAndUpdate', async function (next) {
+  try {
+    if (this._update.password) {
+      const hashed = await bcrypt.hash(this._update.password, Number(config.bcrypt_salt))
+      this._update.password = hashed;
+    }
+    next();
+  } catch (err) {
+    return next(err);
+  }
+});
+
+
+
+
+
 userSchema.methods.toJSON = function () {
   const obj = this.toObject();
   delete obj.password;
   return obj;
 };
+
+
 
 userSchema.statics.isUserExists = async function (userId: string) {
   const existingUser = await User.findOne({ userId });

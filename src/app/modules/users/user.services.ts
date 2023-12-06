@@ -1,11 +1,13 @@
 import { User } from './user.model';
 import { TOrders, TUser } from './user.interface';
-const userToDatabase = async (user: TUser): Promise<TUser> => {
+
+
+const userToDatabase = async (user: TUser) => {
   const result = await User.create(user);
   return result;
 };
 
-const getUsersFromDatabase = async (): Promise<TUser[]> => {
+const getUsersFromDatabase = async () => {
   const result = await User.find().select({
     username: 1,
     fullName: 1,
@@ -19,7 +21,7 @@ const getUsersFromDatabase = async (): Promise<TUser[]> => {
 
 const getSingleUserFromDatabase = async (
   userId: string,
-): Promise<TUser | null> => {
+) => {
   if (!(await User.isUserExists(userId))) {
     throw new Error('User not found');
   }
@@ -29,15 +31,11 @@ const getSingleUserFromDatabase = async (
   return result;
 };
 
-const updateUserToDatabase = async (
-  userId: string,
-  userData: TUser,
-): Promise<TUser | null> => {
+const updateUserToDatabase = async (userId: string, userData: Partial<TUser>) => {
   if (!(await User.isUserExists(userId))) {
     throw new Error('User not found');
   }
-  const updateData = { $set: userData };
-  const result = await User.findOneAndUpdate({ userId }, updateData, {
+  const result = await User.findOneAndUpdate({ userId }, userData, {
     new: true,
     runValidators: true,
   })
@@ -48,7 +46,7 @@ const updateUserToDatabase = async (
 
 const deleteUserFromDataBase = async (
   userId: string,
-): Promise<TUser | null> => {
+) => {
   if (!(await User.isUserExists(userId))) {
     throw new Error('User not found');
   }
@@ -59,11 +57,10 @@ const deleteUserFromDataBase = async (
 const createOrderToDatabase = async (
   userId: string,
   userData: TOrders,
-): Promise<TUser | null> => {
+) => {
   if (!(await User.isUserExists(userId))) {
     throw new Error('User not found');
   }
-
   const updateData = { $push: { orders: userData } };
   const result = await User.findOneAndUpdate({ userId }, updateData, {
     new: true,
@@ -72,7 +69,7 @@ const createOrderToDatabase = async (
   return result;
 };
 
-const getOrder = async (userId: string): Promise<TUser | null> => {
+const getOrder = async (userId: string) => {
   if (!(await User.isUserExists(userId))) {
     throw new Error('User not found');
   }
