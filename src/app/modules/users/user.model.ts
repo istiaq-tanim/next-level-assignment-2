@@ -52,29 +52,11 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-userSchema.pre('findOneAndUpdate', async function (next) {
-  try {
-    if (this._update.password) {
-      const hashed = await bcrypt.hash(this._update.password, Number(config.bcrypt_salt))
-      this._update.password = hashed;
-    }
-    next();
-  } catch (err) {
-    return next(err);
-  }
-});
-
-
-
-
-
 userSchema.methods.toJSON = function () {
   const obj = this.toObject();
   delete obj.password;
   return obj;
 };
-
-
 
 userSchema.statics.isUserExists = async function (userId: string) {
   const existingUser = await User.findOne({ userId });

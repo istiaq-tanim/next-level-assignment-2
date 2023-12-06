@@ -1,5 +1,7 @@
 import { User } from './user.model';
 import { TOrders, TUser } from './user.interface';
+import config from '../../config';
+import bcrypt from 'bcrypt';
 
 
 const userToDatabase = async (user: TUser) => {
@@ -34,6 +36,14 @@ const getSingleUserFromDatabase = async (
 const updateUserToDatabase = async (userId: string, userData: Partial<TUser>) => {
   if (!(await User.isUserExists(userId))) {
     throw new Error('User not found');
+  }
+  if (userData.password) {
+    try {
+      const hashedPassword = await bcrypt.hash(userData.password, Number(config.bcrypt_salt));
+      userData.password = hashedPassword;
+    } catch (error) {
+      throw new Error('Error hashing the password');
+    }
   }
   const result = await User.findOneAndUpdate({ userId }, userData, {
     new: true,

@@ -11,7 +11,7 @@ const addressSchema = z.object({
   country: z.string(),
 });
 
-export const orderSchema = z.object({
+const orderSchema = z.object({
   productName: z.string(),
   price: z.number().refine(
     (value) => value > 0,
@@ -52,7 +52,7 @@ const updateAddressSchema = z.object({
   country: z.string().optional(),
 });
 
-export const updateOrderSchema = z.object({
+const updateOrderSchema = z.object({
   productName: z.string().optional(),
   price: z.number().refine(
     (value) => value > 0,
@@ -64,7 +64,7 @@ export const updateOrderSchema = z.object({
   ).optional(),
 });
 
-export const userUpdateValidationUpdateSchema = z.object({
+const userUpdateValidationUpdateSchema = z.object({
   userId: z.string().optional(),
   username: z
     .string()
@@ -80,5 +80,9 @@ export const userUpdateValidationUpdateSchema = z.object({
   address: updateAddressSchema.optional(),
   orders: z.array(updateOrderSchema).optional(),
 });
-
+export const validationUser = {
+  userUpdateValidationUpdateSchema,
+  userCreateValidationUpdateSchema,
+  orderSchema
+}
 

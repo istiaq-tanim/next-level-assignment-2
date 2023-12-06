@@ -11,7 +11,7 @@ app.use('/api/users', UserRoute);
 app.get('/', (req, res) => {
   res.status(200).json({
     status: 'success',
-    message: 'Welcome to  Next Level Assignment',
+    message: 'Welcome to Our Next Level Assignment',
   });
 });
 

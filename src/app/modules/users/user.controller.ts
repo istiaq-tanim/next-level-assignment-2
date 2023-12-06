@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import { UserServices } from './user.services';
-import { orderSchema, userCreateValidationUpdateSchema, userUpdateValidationUpdateSchema } from './user.validation';
+import { validationUser } from './user.validation';
 
 const createUser = async (req: Request, res: Response) => {
   try {
     const user = req.body;
-    const zodParseData = userCreateValidationUpdateSchema.parse(user);
+    const zodParseData = validationUser.userCreateValidationUpdateSchema.parse(user);
     const result = await UserServices.userToDatabase(zodParseData);
     res.status(201).json({
       success: true,
@@ -62,7 +62,7 @@ const updateUser = async (req: Request, res: Response) => {
   try {
     const user = req.body;
     const { userId } = req.params;
-    const zodParseData = userUpdateValidationUpdateSchema.parse(user);
+    const zodParseData = validationUser.userUpdateValidationUpdateSchema.parse(user);
     const result = await UserServices.updateUserToDatabase(userId, zodParseData);
     res.status(200).json({
       success: true,
@@ -101,13 +101,12 @@ const deleteUser = async (req: Request, res: Response) => {
     });
   }
 };
-
 const createProduct = async (req: Request, res: Response) => {
   try {
     const userData = req.body;
     const { userId } = req.params;
 
-    const parserData = orderSchema.parse(userData);
+    const parserData = validationUser.orderSchema.parse(userData);
     await UserServices.createOrderToDatabase(userId, parserData);
     res.status(200).json({
       success: true,
