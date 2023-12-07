@@ -24,7 +24,7 @@ const getSingleUserFromDatabase = async (
   if (!(await User.isUserExists(userId))) {
     throw new Error('User not found');
   }
-  const result = await User.findOne({ userId })
+  const result = await User.findOne({ userId: Number(userId) })
     .select({ password: 0, orders: 0 })
     .select('-_id');
   return result;
@@ -34,7 +34,7 @@ const updateUserToDatabase = async (userId: string, userData: Partial<TUser>) =>
   if (!(await User.isUserExists(userId))) {
     throw new Error('User not found');
   }
-  const result = await User.findOneAndUpdate({ userId }, userData, {
+  const result = await User.findOneAndUpdate({ userId: Number(userId) }, userData, {
     new: true,
     runValidators: true,
   })
@@ -49,7 +49,7 @@ const deleteUserFromDataBase = async (
   if (!(await User.isUserExists(userId))) {
     throw new Error('User not found');
   }
-  const result = await User.findOneAndDelete({ userId });
+  const result = await User.findOneAndDelete({ userId: Number(userId) });
   return result;
 };
 
@@ -61,7 +61,7 @@ const createOrderToDatabase = async (
     throw new Error('User not found');
   }
   const updateData = { $push: { orders: userData } };
-  const result = await User.findOneAndUpdate({ userId }, updateData, {
+  const result = await User.findOneAndUpdate({ userId: Number(userId) }, updateData, {
     new: true,
     runValidators: true,
   });
@@ -72,16 +72,18 @@ const getOrder = async (userId: string) => {
   if (!(await User.isUserExists(userId))) {
     throw new Error('User not found');
   }
-  const result = await User.findOne({ userId }).select({ orders: 1 });
+  const result = await User.findOne({ userId: Number(userId) }).select({ orders: 1 });
   return result;
 };
 
 const getTotalPriceFromDB = async (userId: string) => {
+
   if (!(await User.isUserExists(userId))) {
     throw new Error('User not found');
   }
+  const numberId = Number(userId)
   const result = await User.aggregate([
-    { $match: { userId } },
+    { $match: { userId: numberId } },
     { $unwind: '$orders' },
     {
       $group: {

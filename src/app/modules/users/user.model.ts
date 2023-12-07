@@ -33,7 +33,7 @@ const orderSchema = new Schema<TOrders>({
 });
 
 const userSchema = new Schema<TUser, UserModel>({
-  userId: { type: String, unique: true, required: true },
+  userId: { type: Number, unique: true, required: true },
   username: { type: String, unique: true },
   password: { type: String },
   fullName: { type: fullNameSchema, _id: false },
@@ -52,7 +52,7 @@ userSchema.methods.toJSON = function () {
 };
 
 userSchema.statics.isUserExists = async function (userId: string) {
-  const existingUser = await User.findOne({ userId });
+  const existingUser = await User.findOne({ userId: Number(userId) });
   return existingUser;
 };
 export const User = model<TUser, UserModel>('User', userSchema);

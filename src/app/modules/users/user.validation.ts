@@ -25,7 +25,7 @@ const orderSchema = z.object({
 
 
 export const userCreateValidationUpdateSchema = z.object({
-  userId: z.string(),
+  userId: z.number(),
   username: z
     .string()
     .max(20, { message: 'UserName must less than 20 Character' }),
@@ -65,7 +65,7 @@ const updateOrderSchema = z.object({
 });
 
 const userUpdateValidationUpdateSchema = z.object({
-  userId: z.string().optional(),
+  userId: z.number().optional(),
   username: z
     .string()
     .max(20, { message: 'UserName must less than 20 Character' }).optional(),
